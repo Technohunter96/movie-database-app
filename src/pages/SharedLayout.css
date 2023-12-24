@@ -1,0 +1,11 @@
+.shared-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Zajistí, že layout bude minimálně zabírat celou výšku okna prohlížeče */
+}
+
+.content {
+    flex: 1;
+    /* Toto zajistí, že tento obsah zabere všechno dostupné místo mezi navigací a footerem */
+}

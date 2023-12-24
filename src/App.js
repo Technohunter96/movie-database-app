@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import SharedLayout from "./pages/SharedLayout"
+import Dashboard from "./pages/Dashboard"
+import Movies from "./pages/Movies"
+import Series from "./pages/Series"
+import Kids from "./pages/Kids"
+// import { MovieProvider } from "./MovieContext"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+   return (
+      <Router>
+         <Routes>
+            <Route path="/" element={<SharedLayout />}>
+               <Route index element={<Dashboard />} />
+               <Route path="dashboard" element={<Dashboard />} />
+               <Route path="movies" element={<Movies />} />
+               <Route path="series" element={<Series />} />
+               <Route path="kids" element={<Kids />} />
+            </Route>
+         </Routes>
+      </Router>
+   )
 }
 
-export default App;
+export default App
