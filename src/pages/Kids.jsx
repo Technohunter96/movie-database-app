@@ -1,58 +1,8 @@
-import "./Movies.css"
-import { useState, useEffect } from "react"
+import withCommonFunctionality from "../components/withCommonFunctionality";
+import MovieList from "../components/MovieList";
 
-function Kids() {
-   const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&page=3&certification_country=US&certification=G`
-
-   const IMG_PATH = "https://image.tmdb.org/t/p/w1280"
-
-   const [movies, setMovies] = useState([])
-
-   useEffect(() => {
-      fetch(apiUrl)
-         .then((response) => response.json())
-         .then((data) => {
-            console.log(data.results)
-            setMovies(data.results)
-         })
-         .catch((error) => {
-            console.error("Chyba:", error)
-         })
-   }, [apiUrl])
-
-   const getClassByRate = (vote) => {
-      if (vote >= 8) {
-         return "green"
-      } else if (vote >= 5) {
-         return "orange"
-      } else {
-         return "red"
-      }
-   }
-
-   return (
-      <main>
-         {movies.map((oneMovie) => {
-            const { id, title, overview, poster_path, vote_average } = oneMovie
-
-            return (
-               <div className="movie" key={id}>
-                  <img src={`${IMG_PATH + poster_path}`} alt={title} />
-                  <div class="movie-info">
-                     <h3>{title}</h3>
-                     <span className={getClassByRate(vote_average)}>
-                        {vote_average.toFixed(1)}
-                     </span>
-                  </div>
-                  <div class="overview">
-                     <h3>Overview</h3>
-                     <p>{overview}</p>
-                  </div>
-               </div>
-            )
-         })}
-      </main>
-   )
+function Kids(props) {
+   return <MovieList {...props} />
 }
 
-export default Kids
+export default withCommonFunctionality(Kids, `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&certification_country=US&certification=G`)
