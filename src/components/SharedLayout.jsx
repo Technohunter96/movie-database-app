@@ -1,13 +1,21 @@
+import { useState } from "react"
+import { Outlet } from "react-router-dom"
 import NavBar from "./Navbar"
 import Footer from "./Footer"
-import { Outlet } from "react-router-dom"
 
 const SharedLayout = () => {
+   const [searchResults, setSearchResults] = useState(null)
+
+   // Props ze SearchBaru
+   const handleSearchResults = (results) => {
+      setSearchResults(results)
+   }
+
    return (
       <div className="shared-layout">
-         <NavBar />
+         <NavBar onSearchResults={handleSearchResults} />
          <div className="content">
-            <Outlet />
+            <Outlet context={{ searchResults }} />
          </div>
          <Footer />
       </div>

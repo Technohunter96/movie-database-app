@@ -29,7 +29,7 @@ function MovieList({
                      vote_average,
                   } = oneMovie
                   
-                  const movieTitle = titleKey === "name" ? name : title;
+                  const movieTitle = titleKey === "name" ? name : title || name;
 
                   return (
                      <div className="movie" key={id}>

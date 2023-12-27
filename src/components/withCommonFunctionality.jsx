@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
+import { toast } from "react-toastify"
 
-const withCommonFunctionality = (WrappedComponent, apiUrl) => {
+const withCommonFunctionality = (WrappedComponent, apiUrl, searchResults) => {
    return function WithCommonFunctionality(props) {
       const [page, setPage] = useState(1)
       const [movies, setMovies] = useState([])
@@ -51,20 +52,26 @@ const withCommonFunctionality = (WrappedComponent, apiUrl) => {
       }, [])
 
       useEffect(() => {
-         fetch(`${apiUrl}&page=${page}`)
-            .then((response) => response.json())
-            .then((data) => {
-               if (data.results.length === 0) {
-                  setHasMore(false)
-               } else {
-                  setMovies([...movies, ...data.results])
-                  setLoading(false)
-               }
-            })
-            .catch((error) => {
-               console.error("Chyba:", error)
-            })
-      }, [apiUrl, page])
+         if (searchResults) {
+            setMovies(searchResults)
+            setLoading(false)
+            setHasMore(false)
+         } else {
+            fetch(`${apiUrl}&page=${page}`)
+               .then((response) => response.json())
+               .then((data) => {
+                  if (data.results.length === 0) {
+                     setHasMore(false)
+                  } else {
+                     setMovies([...movies, ...data.results])
+                     setLoading(false)
+                  }
+               })
+               .catch((error) => {
+                  toast.error("Loading error", error.message)
+               })
+         }
+      }, [apiUrl, page, searchResults])
 
       return (
          <WrappedComponent
