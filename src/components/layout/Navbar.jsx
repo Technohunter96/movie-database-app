@@ -1,53 +1,32 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect, useContext, useRef } from "react"
 import { NavLink } from "react-router-dom"
-import { ReactComponent as SearchIcon } from "../assets/svg/searchIcon.svg"
-import { toast } from "react-toastify"
+import { ReactComponent as SearchIcon } from "../../assets/svg/searchIcon.svg"
+import MovieContext from "../../context/MovieContext"
 
-function SearchBar(props) {
+function SearchBar() {
    const [isActive, setActive] = useState(false)
-   const [searchValue, setSearchValue] = useState("")
    const inputRef = useRef(null)
 
+   const { handleSubmit, searchValue, setSearchValue } =
+      useContext(MovieContext)
+
+      // Toggle search bar
    const toggleSearch = () => {
       setActive(!isActive)
    }
 
+   
+   // Focus on input when search is active
    useEffect(() => {
       if (isActive && inputRef.current) {
          inputRef.current.focus()
       }
    }, [isActive])
-
-   const handleSubmit = (e) => {
-      e.preventDefault()
-
-      const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${searchValue}&include_adult=true&language=en-US&page=1`
-
-      fetch(searchUrl)
-         .then((response) => {
-            if (!response.ok) {
-               throw new Error("Network response was not ok")
-            }
-            return response.json()
-         })
-         .then((data) => {
-            if (!data.results || data.results.length === 0) {
-               toast.error("No results found for the search term")
-               return
-            }
-            props.onSearchResults(data.results)
-         })
-         .catch((error) => {
-            toast.error("Search Error: " + error.message)
-         })
-
-      setSearchValue("")
-   }
-
+   
    const handleInputChange = (e) => {
       setSearchValue(e.target.value)
    }
-
+   
    return (
       <div className={`search ${isActive ? "active" : ""}`}>
          <button type="button" className="searchButton" onClick={toggleSearch}>
@@ -69,6 +48,7 @@ function SearchBar(props) {
 
 function Navbar() {
    const [scrolling, setScrolling] = useState(false)
+   const { setContentType } = useContext(MovieContext);
 
    useEffect(() => {
       const handleScroll = () => {
@@ -86,14 +66,18 @@ function Navbar() {
       }
    }, [])
 
+   const handleNavLinkClick = (type) => {
+      setContentType(type);
+   }
+
    return (
       <header className={`navbar ${scrolling ? "scrolling" : ""}`}>
          <nav className="navbarNav">
             <div className="navbarListItems">
-               <NavLink to="/">DASHBOARD</NavLink>
-               <NavLink to="/movies">MOVIES</NavLink>
-               <NavLink to="/series">SERIES</NavLink>
-               <NavLink to="/kids">KIDS</NavLink>
+               <NavLink to="/" onClick={() => handleNavLinkClick("trending")}>DASHBOARD</NavLink>
+               <NavLink to="/movies" onClick={() => handleNavLinkClick("movies")}>MOVIES</NavLink>
+               <NavLink to="/series" onClick={() => handleNavLinkClick("series")}>SERIES</NavLink>
+               <NavLink to="/kids" onClick={() => handleNavLinkClick("kids")}>KIDS</NavLink>
             </div>
             <SearchBar />
          </nav>

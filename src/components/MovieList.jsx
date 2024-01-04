@@ -1,9 +1,11 @@
-import React from "react"
+import { useContext } from "react"
 import { ReactComponent as ArrowDown } from "../assets/svg/arrowDown.svg"
-import Spinner from "../components/Spinner"
+import Spinner from "./layout/Spinner"
+import MovieContext from "../context/MovieContext"
 
-function MovieList({
-   movies,
+function MovieList() {
+
+const { movies,
    IMG_PATH,
    getClassByRate,
    titleKey,
@@ -11,8 +13,9 @@ function MovieList({
    scrollToTop,
    showButton,
    hasMore,
-   loading,
-}) {
+   loading } = useContext(MovieContext)
+
+
    return (
       <>
          {loading ? (
@@ -29,6 +32,7 @@ function MovieList({
                      vote_average,
                   } = oneMovie
                   
+                  // in API, movies are called "title" and series are called "name"
                   const movieTitle = titleKey === "name" ? name : title || name;
 
                   return (
@@ -73,5 +77,6 @@ function MovieList({
       </>
    )
 }
+
 
 export default MovieList

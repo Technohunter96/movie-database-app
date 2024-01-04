@@ -1,13 +1,28 @@
-import { useOutletContext } from 'react-router-dom';
-import withCommonFunctionality from "../components/withCommonFunctionality"
-import MovieList from "../components/MovieList"
+import React, { useEffect, useContext } from 'react';
+import MovieList from "../components/MovieList";
+import MovieContext from '../context/MovieContext';
+import axios from 'axios';
 
-const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+function Movies() {
+   const { setMovies, setLoading, apiUrl, fetchData } = useContext(MovieContext);
+   
+   useEffect(() => {
+      const getMovies = async () => {
+         try {
+            setLoading(true);
+            const response = await axios.get(apiUrl);
+            const { data } = response;
+            setMovies(data.results);
+            setLoading(false);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getMovies();
+   }, [setMovies, setLoading, apiUrl]);
 
-function Movies(props) {
-   const { searchResults } = useOutletContext(); 
-
-   return <MovieList {...props} />
+   return <MovieList />;
 }
 
-export default withCommonFunctionality(Movies, apiUrl)
+
+export default Movies;
