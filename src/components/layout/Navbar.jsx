@@ -2,19 +2,20 @@ import { useState, useEffect, useContext, useRef } from "react"
 import { NavLink } from "react-router-dom"
 import { ReactComponent as SearchIcon } from "../../assets/svg/searchIcon.svg"
 import MovieContext from "../../context/MovieContext"
+import { toast } from "react-toastify"
 
+// Search bar component
 function SearchBar() {
    const [isActive, setActive] = useState(false)
    const inputRef = useRef(null)
 
-   const { handleSubmit, searchValue, setSearchValue } =
+   const { searchValue, setSearchValue, SEARCH_API, setSearchResults } =
       useContext(MovieContext)
 
       // Toggle search bar
    const toggleSearch = () => {
       setActive(!isActive)
    }
-
    
    // Focus on input when search is active
    useEffect(() => {
@@ -26,6 +27,36 @@ function SearchBar() {
    const handleInputChange = (e) => {
       setSearchValue(e.target.value)
    }
+
+   const handleSubmit = async (e) => {
+      e.preventDefault();
+    
+      if (searchValue && searchValue !== "") {
+        try {
+          const response = await fetch(SEARCH_API + searchValue);
+    
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+    
+          const data = await response.json();
+    
+          if (!data.results || data.results.length === 0) {
+            toast.error("No results found for the search term");
+            return;
+          }
+    
+          setSearchResults(data.results);
+        } catch (error) {
+          toast.error("Search Error: " + error.message);
+        }
+    
+        setSearchValue("");
+      } else {
+        toast.error("Please enter a search term");
+        window.location.reload();
+      }
+    };
    
    return (
       <div className={`search ${isActive ? "active" : ""}`}>
@@ -46,9 +77,10 @@ function SearchBar() {
    )
 }
 
+// Navbar component
 function Navbar() {
    const [scrolling, setScrolling] = useState(false)
-   const { setContentType } = useContext(MovieContext);
+   const { setContentType, setSearchResults } = useContext(MovieContext);
 
    useEffect(() => {
       const handleScroll = () => {
@@ -67,6 +99,7 @@ function Navbar() {
    }, [])
 
    const handleNavLinkClick = (type) => {
+      setSearchResults("");
       setContentType(type);
    }
 

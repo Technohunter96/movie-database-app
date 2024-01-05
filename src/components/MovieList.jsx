@@ -4,17 +4,20 @@ import Spinner from "./layout/Spinner"
 import MovieContext from "../context/MovieContext"
 
 function MovieList() {
+   const {
+      movies,
+      searchResults,
+      IMG_PATH,
+      getClassByRate,
+      titleKey,
+      loadMore,
+      scrollToTop,
+      showButton,
+      hasMore,
+      loading,
+   } = useContext(MovieContext)
 
-const { movies,
-   IMG_PATH,
-   getClassByRate,
-   titleKey,
-   loadMore,
-   scrollToTop,
-   showButton,
-   hasMore,
-   loading } = useContext(MovieContext)
-
+   const moviesToDisplay = searchResults ? searchResults : movies
 
    return (
       <>
@@ -22,7 +25,7 @@ const { movies,
             <Spinner />
          ) : (
             <main>
-               {movies.map((oneMovie) => {
+               {moviesToDisplay.map((oneMovie) => {
                   const {
                      id,
                      title,
@@ -31,9 +34,8 @@ const { movies,
                      poster_path,
                      vote_average,
                   } = oneMovie
-                  
-                  // in API, movies are called "title" and series are called "name"
-                  const movieTitle = titleKey === "name" ? name : title || name;
+
+                  const movieTitle = titleKey === "name" ? name : title || name
 
                   return (
                      <div className="movie" key={id}>
@@ -77,6 +79,5 @@ const { movies,
       </>
    )
 }
-
 
 export default MovieList

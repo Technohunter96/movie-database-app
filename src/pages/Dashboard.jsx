@@ -1,24 +1,28 @@
 import React, { useEffect, useContext } from 'react';
 import MovieList from "../components/MovieList";
 import MovieContext from '../context/MovieContext';
+import axios from 'axios';
 
 function Dashboard() {
-   const { setMovies, setLoading, apiUrl } = useContext(MovieContext);
-
+   const { setMovies, setLoading, apiUrl, page } = useContext(MovieContext);
+   
    useEffect(() => {
-      fetch(apiUrl)
-         .then(response => response.json())
-         .then(data => {
+      const getMovies = async () => {
+         try {
+            const response = await axios.get(`${apiUrl}&page=${page}`)
+            const { data } = response;
             setMovies(data.results);
             setLoading(false);
-         })
-         .catch(error => {
-            console.error('Error fetching movies:', error.message);
+         } catch (error) {
+            console.log(error);
             setLoading(false);
-         });
-   }, [setMovies, setLoading, apiUrl]);
-
+         }
+      };
+      getMovies();
+   }, [setMovies, setLoading, apiUrl, page]);
+   
    return <MovieList />;
 }
+
 
 export default Dashboard;

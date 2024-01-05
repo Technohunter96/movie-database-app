@@ -1,17 +1,15 @@
 import { useState, useEffect, createContext } from "react"
-import axios from 'axios';
-import { toast } from "react-toastify"
 
 const MovieContext = createContext()
 
 export const MovieProvider = ({ children }) => {
-   const [searchResults, setSearchResults] = useState(null)
-   const [page, setPage] = useState(1)
    const [movies, setMovies] = useState([])
    const [loading, setLoading] = useState(true)
+   const [page, setPage] = useState(1)
    const [hasMore, setHasMore] = useState(true)
    const [showButton, setShowButton] = useState(false)
    // SearchBar
+   const [searchResults, setSearchResults] = useState(null)
    const [searchValue, setSearchValue] = useState("")
    // Content Type
    const [contentType, setContentType] = useState("")
@@ -31,11 +29,12 @@ export const MovieProvider = ({ children }) => {
          case "kids":
             return `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&certification_country=US&certification=G`
          default:
-            return ""
+            return `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
       }
    }
 
    const apiUrl = getApiUrl(contentType)
+
 
    // Scroll to top
    const scrollToTop = () => {
@@ -81,71 +80,16 @@ export const MovieProvider = ({ children }) => {
       }
    }, [])
 
-   // Fetching movies / search results
-   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          if (searchResults) {
-            setMovies(searchResults);
-            setLoading(false);
-            setHasMore(false);
-          } else {
-            const response = await axios.get(`${apiUrl}&page=${page}`);
-            const data = response.data;
-    
-            if (data.results.length === 0) {
-              setHasMore(false);
-            } else {
-              setMovies([...movies, ...data.results]);
-              setLoading(false);
-            }
-          }
-        } catch (error) {
-          toast.error("Loading error", error.message);
-          setLoading(false);
-        }
-      };
-    
-      fetchData();
-    }, []);
-
-   // SearchBar
-   const handleSubmit = (e) => {
-      e.preventDefault()
-
-      
-      fetch(SEARCH_API + searchValue)
-         .then((response) => {
-            if (!response.ok) {
-               throw new Error("Network response was not ok")
-            }
-            return response.json()
-         })
-         .then((data) => {
-            if (!data.results || data.results.length === 0) {
-               toast.error("No results found for the search term")
-               return
-            }
-            setSearchResults(data.results)
-         })
-         .catch((error) => {
-            toast.error("Search Error: " + error.message)
-         })
-
-      setSearchValue("")
-   }
 
    const contextValue = {
-      searchResults,
-      setSearchResults,
+      movies,
+      setMovies,
       loading,
       setLoading,
       page,
       setPage,
       hasMore,
       setHasMore,
-      movies,
-      setMovies,
       showButton,
       setShowButton,
       IMG_PATH,
@@ -153,12 +97,14 @@ export const MovieProvider = ({ children }) => {
       scrollToTop,
       getClassByRate,
       // SearchBar
+      searchResults,
+      setSearchResults,
       searchValue,
       setSearchValue,
-      handleSubmit,
       getApiUrl,
       setContentType,
       apiUrl,
+      SEARCH_API,
    }
 
    return (

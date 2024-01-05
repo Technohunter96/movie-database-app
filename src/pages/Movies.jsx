@@ -4,23 +4,23 @@ import MovieContext from '../context/MovieContext';
 import axios from 'axios';
 
 function Movies() {
-   const { setMovies, setLoading, apiUrl, fetchData } = useContext(MovieContext);
+   const { setMovies, setLoading, apiUrl, page } = useContext(MovieContext);
    
    useEffect(() => {
       const getMovies = async () => {
          try {
-            setLoading(true);
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(`${apiUrl}&page=${page}`)
             const { data } = response;
             setMovies(data.results);
             setLoading(false);
          } catch (error) {
             console.log(error);
+            setLoading(false);
          }
       };
       getMovies();
-   }, [setMovies, setLoading, apiUrl]);
-
+   }, [setMovies, setLoading, apiUrl, page]);
+   
    return <MovieList />;
 }
 
