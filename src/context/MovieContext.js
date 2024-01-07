@@ -105,6 +105,7 @@ export const MovieProvider = ({ children }) => {
       searchValue,
       setSearchValue,
       getApiUrl,
+      contentType,
       setContentType,
       apiUrl,
       SEARCH_API,

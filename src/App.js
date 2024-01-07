@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard"
 import Movies from "./pages/Movies"
 import Series from "./pages/Series"
 import Kids from "./pages/Kids"
+import MovieItem from "./components/MovieItem"
 import { MovieProvider } from "./context/MovieContext"
 
 function App() {
@@ -15,10 +16,11 @@ function App() {
             <Routes>
                <Route path="/" element={<SharedLayout />}>
                   <Route index element={<Dashboard />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="movies" element={<Movies />} />
-                  <Route path="series" element={<Series />} />
-                  <Route path="kids" element={<Kids />} />
+                  <Route path="/:content/:id" element={<MovieItem />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/movies" element={<Movies />} />
+                  <Route path="/series" element={<Series />} />
+                  <Route path="/kids" element={<Kids />} />
                </Route>
             </Routes>
          </Router>
