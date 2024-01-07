@@ -19,7 +19,7 @@ function Kids() {
          }
       }
       getMovies()
-   }, [setMovies, setLoading, apiUrl, page, setHasMore])
+   }, [setMovies, setLoading, apiUrl, page])
 
    return <MovieList />
 }
