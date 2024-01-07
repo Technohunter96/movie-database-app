@@ -37,7 +37,7 @@ button {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-} 
+}
 
 .content {
     flex: 1;
@@ -402,16 +402,16 @@ main {
 
 
 .scroll-to-top {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        background-color: var(--primary-color);
-        border: 0;
-        border-radius: 50%;
-        box-shadow: 0 0 20px #ef7715;
-        width: 48px;
-        height: 48px;
-        cursor: pointer;
-        z-index: 2000;
-        transform: rotate(180deg);
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: var(--primary-color);
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #ef7715;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    z-index: 2000;
+    transform: rotate(180deg);
 }

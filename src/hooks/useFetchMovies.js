@@ -3,6 +3,7 @@ import MovieContext from "../context/MovieContext"
 import { toast } from "react-toastify"
 import axios from "axios"
 
+// wasn't used
 export default function useFetchMovies() {
    const {
       searchResults,
