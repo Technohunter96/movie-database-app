@@ -1,25 +1,33 @@
-import React from "react"
+import { useContext } from "react"
 import { ReactComponent as ArrowDown } from "../assets/svg/arrowDown.svg"
-import Spinner from "../components/Spinner"
+import Spinner from "./layout/Spinner"
+import MovieContext from "../context/MovieContext"
 
-function MovieList({
-   movies,
-   IMG_PATH,
-   getClassByRate,
-   titleKey,
-   loadMore,
-   scrollToTop,
-   showButton,
-   hasMore,
-   loading,
-}) {
+function MovieList() {
+   const {
+      movies,
+      searchResults,
+      IMG_PATH,
+      getClassByRate,
+      titleKey,
+      loadMore,
+      scrollToTop,
+      showButton,
+      hasMore,
+      loading,
+   } = useContext(MovieContext)
+
+   
+
+   const moviesToDisplay = searchResults ? searchResults : movies
+
    return (
       <>
          {loading ? (
             <Spinner />
          ) : (
             <main>
-               {movies.map((oneMovie) => {
+               {moviesToDisplay.map((oneMovie) => {
                   const {
                      id,
                      title,
@@ -28,8 +36,8 @@ function MovieList({
                      poster_path,
                      vote_average,
                   } = oneMovie
-                  
-                  const movieTitle = titleKey === "name" ? name : title || name;
+
+                  const movieTitle = titleKey === "name" ? name : title || name
 
                   return (
                      <div className="movie" key={id}>

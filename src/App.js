@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import SharedLayout from "./components/SharedLayout"
+import SharedLayout from "./components/layout/SharedLayout"
 import Dashboard from "./pages/Dashboard"
 import Movies from "./pages/Movies"
 import Series from "./pages/Series"
 import Kids from "./pages/Kids"
-// import { MovieProvider } from "./MovieContext"
+import { MovieProvider } from "./context/MovieContext"
 
 function App() {
    return (
-      <>
+      <MovieProvider>
          <Router>
             <Routes>
                <Route path="/" element={<SharedLayout />}>
@@ -23,7 +23,7 @@ function App() {
             </Routes>
          </Router>
          <ToastContainer />
-      </>
+      </MovieProvider>
    )
 }
 

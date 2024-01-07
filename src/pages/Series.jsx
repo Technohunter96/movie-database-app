@@ -1,10 +1,28 @@
-import withCommonFunctionality from "../components/withCommonFunctionality"
-import MovieList from "../components/MovieList"
+import React, { useEffect, useContext } from 'react';
+import MovieList from "../components/MovieList";
+import MovieContext from '../context/MovieContext';
+import axios from 'axios';
 
-function Series(props) {
-   return <MovieList {...props} />
+function Series() {
+   const { setMovies, setLoading, apiUrl, page } = useContext(MovieContext);
+   
+   useEffect(() => {
+      const getMovies = async () => {
+         try {
+            const response = await axios.get(`${apiUrl}&page=${page}`)
+            const { data } = response;
+            setMovies(data.results);
+            setLoading(false);
+         } catch (error) {
+            console.log(error);
+            setLoading(false);
+         }
+      };
+      getMovies();
+   }, [setMovies, setLoading, apiUrl, page]);
+   
+   return <MovieList />;
 }
-export default withCommonFunctionality(
-   Series,
-   `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-)
+
+
+export default Series;

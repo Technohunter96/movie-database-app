@@ -1,16 +1,45 @@
 import { useState, useEffect, createContext } from "react"
-import { toast } from "react-toastify"
 
 const MovieContext = createContext()
 
 export const MovieProvider = ({ children }) => {
-   const [searchResults, setSearchResults] = useState(null)
-   const [page, setPage] = useState(1)
    const [movies, setMovies] = useState([])
    const [loading, setLoading] = useState(true)
+   const [page, setPage] = useState(1)
    const [hasMore, setHasMore] = useState(true)
    const [showButton, setShowButton] = useState(false)
+   // SearchBar
+   const [searchResults, setSearchResults] = useState(null)
+   const [searchValue, setSearchValue] = useState("")
+   // Content Type
+   const savedContentType = sessionStorage.getItem("contentType")
+   const [contentType, setContentType] = useState(savedContentType)
+
    const IMG_PATH = "https://image.tmdb.org/t/p/w1280"
+   const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query="`
+
+   // Catching contentType in sessionStorage when changed
+   useEffect(() => {
+      sessionStorage.setItem("contentType", contentType)
+   }, [contentType])
+
+   // Content Type API URL
+   const getApiUrl = (contentType) => {
+      switch (contentType) {
+         case "trending":
+            return `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+         case "movies":
+            return `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+         case "series":
+            return `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+         case "kids":
+            return `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&certification_country=US&certification=G`
+         default:
+            return `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+      }
+   }
+
+   const apiUrl = getApiUrl(contentType)
 
    // Scroll to top
    const scrollToTop = () => {
@@ -34,7 +63,6 @@ export const MovieProvider = ({ children }) => {
    // Load more button
    const loadMore = () => {
       setPage(page + 1)
-      setShowButton(false)
    }
 
    useEffect(() => {
@@ -55,48 +83,31 @@ export const MovieProvider = ({ children }) => {
          window.removeEventListener("scroll", handleScroll)
       }
    }, [])
-   
-
-   // Fetching movies / search results
-   useEffect(() => {
-      if (searchResults) {
-         setMovies(searchResults)
-         setLoading(false)
-         setHasMore(false)
-      } else {
-         fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_API_KEY}&page=${page}`)
-            .then((response) => response.json())
-            .then((data) => {
-               if (data.results.length === 0) {
-                  setHasMore(false)
-               } else {
-                  setMovies([...movies, ...data.results])
-                  setLoading(false)
-               }
-            })
-            .catch((error) => {
-               toast.error("Loading error", error.message)
-            })
-      }
-   }, [page, searchResults])
 
    const contextValue = {
-      searchResults,
-      setSearchResults,
+      movies,
+      setMovies,
       loading,
       setLoading,
       page,
       setPage,
       hasMore,
       setHasMore,
-      movies,
-      setMovies,
       showButton,
       setShowButton,
       IMG_PATH,
       loadMore,
       scrollToTop,
       getClassByRate,
+      // SearchBar
+      searchResults,
+      setSearchResults,
+      searchValue,
+      setSearchValue,
+      getApiUrl,
+      setContentType,
+      apiUrl,
+      SEARCH_API,
    }
 
    return (
