@@ -1,7 +1,7 @@
 function Footer() {
    return (
       <footer>
-         <h3 className="footer">Footer</h3>
+         <h3 className="footer">&copy; Michal Havlík </h3>
       </footer>
    )
 }

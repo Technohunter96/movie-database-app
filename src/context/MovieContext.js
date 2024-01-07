@@ -12,10 +12,16 @@ export const MovieProvider = ({ children }) => {
    const [searchResults, setSearchResults] = useState(null)
    const [searchValue, setSearchValue] = useState("")
    // Content Type
-   const [contentType, setContentType] = useState("")
+   const savedContentType = sessionStorage.getItem("contentType")
+   const [contentType, setContentType] = useState(savedContentType)
 
    const IMG_PATH = "https://image.tmdb.org/t/p/w1280"
    const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query="`
+
+   // Catching contentType in sessionStorage when changed
+   useEffect(() => {
+      sessionStorage.setItem("contentType", contentType)
+   }, [contentType])
 
    // Content Type API URL
    const getApiUrl = (contentType) => {
@@ -34,7 +40,6 @@ export const MovieProvider = ({ children }) => {
    }
 
    const apiUrl = getApiUrl(contentType)
-
 
    // Scroll to top
    const scrollToTop = () => {
@@ -58,7 +63,6 @@ export const MovieProvider = ({ children }) => {
    // Load more button
    const loadMore = () => {
       setPage(page + 1)
-      setShowButton(false)
    }
 
    useEffect(() => {
@@ -79,7 +83,6 @@ export const MovieProvider = ({ children }) => {
          window.removeEventListener("scroll", handleScroll)
       }
    }, [])
-
 
    const contextValue = {
       movies,

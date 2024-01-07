@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&Roboto:wght@200;400&display=swap');
+
+
 
 * {
     box-sizing: border-box;
@@ -35,10 +37,17 @@ button {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
+} 
 
 .content {
     flex: 1;
+    padding: 0 60px;
+}
+
+@media (max-width: 690px) {
+    .content {
+        padding: 0;
+    }
 }
 
 /* -------------------- Navbar -------------------- */
@@ -47,13 +56,13 @@ button {
     top: 0;
     height: 85px;
     color: var(--secondary-color);
-    /* background-color: #000; */
-    background-color: #000000;
+    background-color: var(--primary-color);
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease;
+    margin-bottom: 1rem;
 }
 
 @media (max-width: 690px) {
@@ -214,6 +223,44 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* -------------------- Slider -------------------- */
+.slider {
+    /* width: 100%; */
+    /* height: 400px; */
+    background-color: transparent;
+    position: relative;
+    /* overflow: hidden; */
+}
+
+/* .movie.slider {
+    background-color: transparent;
+    box-shadow: none;
+    margin: 1rem;
+} */
+
+.movie.slider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.slider h1 {
+    font-family: "Roboto", sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-bottom: .5rem;
+    margin-left: 1rem;
+    color: var(--secondary-color);
+}
+
+@media (max-width: 690px) {
+    .slider h1 {
+        font-size: 2rem;
+    }
 }
 
 /* -------------------- Movies -------------------- */

@@ -17,6 +17,8 @@ function MovieList() {
       loading,
    } = useContext(MovieContext)
 
+   
+
    const moviesToDisplay = searchResults ? searchResults : movies
 
    return (
