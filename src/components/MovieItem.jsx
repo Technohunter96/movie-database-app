@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { useParams } from "react-router-dom"
+import MovieContext from "../context/MovieContext"
 
 function MovieItem() {
    const { id } = useParams()
    const [movie, setMovie] = useState(null)
    const [trailerUrl, setTrailerUrl] = useState(null)
+   const { contentType } = useContext(MovieContext)
+
+   let content = "movie"
+   if (contentType === "series") {
+        content = "tv"
+   }
 
    // Get movie
    useEffect(() => {
       fetch(
-         `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+         `https://api.themoviedb.org/3/${content}/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
       )
          .then((response) => response.json())
          .then((data) => setMovie(data))
@@ -18,7 +25,7 @@ function MovieItem() {
    // Get trailer
    useEffect(() => {
       fetch(
-         `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+         `https://api.themoviedb.org/3/${content}/${id}/videos?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
       )
          .then((response) => response.json())
          .then((data) => {
@@ -29,6 +36,8 @@ function MovieItem() {
             }
          })
    }, [id])
+
+   
 
    if (!movie) return null
 

@@ -34,7 +34,7 @@ function MovieList() {
                      id,
                      title,
                      name,
-                     overview,
+                     // overview,
                      poster_path,
                      vote_average,
                   } = oneMovie

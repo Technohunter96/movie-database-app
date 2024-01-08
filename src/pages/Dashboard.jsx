@@ -105,7 +105,7 @@ function Dashboard() {
                               <div key={id} className="slider movie">
                                  <img
                                     src={`${IMG_PATH}${poster_path}`}
-                                    alt={title}
+                                    alt={movieTitle}
                                  />
                                  <div className="movie-info">
                                     <h3>{movieTitle}</h3>
