@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from "react"
+import { useEffect, useContext } from "react"
+import { Link } from "react-router-dom"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -11,10 +12,13 @@ function Dashboard() {
       movies,
       setMovies,
       setLoading,
+      titleKey,
+      getClassByRate,
       apiUrl,
       page,
       IMG_PATH,
       searchResults,
+      contentType,
    } = useContext(MovieContext)
 
    useEffect(() => {
@@ -37,7 +41,7 @@ function Dashboard() {
       infinite: true,
       speed: 500,
       slidesToShow: 5,
-      initialSlide: 0,
+      initialSlide: 3,
       autoplay: true,
       autoplaySpeed: 2000,
       pauseOnHover: true,
@@ -82,18 +86,43 @@ function Dashboard() {
             <div className="slider">
                <h1>Trending</h1>
                <Slider {...settings}>
-                  {movies.map((movie) => (
-                     <div key={movie.id} className="movie slider">
-                        <img
-                           src={`${IMG_PATH}${movie.poster_path}`}
-                           alt={movie.title}
-                        />
-                        <div className="overview">
-                           <h2>{movie.title}</h2>
-                           <p>{movie.overview}</p>
-                        </div>
-                     </div>
-                  ))}
+                  {movies.map((oneMovie) => {
+                     const {
+                        id,
+                        title,
+                        name,
+                        poster_path,
+                        overview,
+                        vote_average,
+                     } = oneMovie
+
+                     const movieTitle =
+                        titleKey === "name" ? name : title || name
+
+                     return (
+                        <>
+                           <Link to={`/${contentType}/${id}`}>
+                              <div key={id} className="slider movie">
+                                 <img
+                                    src={`${IMG_PATH}${poster_path}`}
+                                    alt={title}
+                                 />
+                                 <div className="movie-info">
+                                    <h3>{movieTitle}</h3>
+                                    <span
+                                       className={getClassByRate(vote_average)}
+                                    >
+                                       {vote_average.toFixed(1)}
+                                    </span>
+                                 </div>
+                                 <div className="overview">
+                                    <p>{overview}</p>
+                                 </div>
+                              </div>
+                           </Link>
+                        </>
+                     )
+                  })}
                </Slider>
             </div>
          )}
