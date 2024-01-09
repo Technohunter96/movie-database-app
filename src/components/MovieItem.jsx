@@ -1,71 +1,64 @@
 import { useEffect, useState, useContext } from "react"
 import { useParams } from "react-router-dom"
+import axios from "axios"
 import MovieContext from "../context/MovieContext"
+import MovieList from "../components/MovieList"
 
 function MovieItem() {
    const { id } = useParams()
    const [movie, setMovie] = useState(null)
    const [trailerUrl, setTrailerUrl] = useState(null)
-   const { contentType } = useContext(MovieContext)
+   const { contentType, searchResults } = useContext(MovieContext)
 
-   let content = "movie"
-   if (contentType === "series") {
-        content = "tv"
-   }
+   let content = contentType === "series" ? "tv" : "movie"
 
    // Get movie
    useEffect(() => {
-      fetch(
-         `https://api.themoviedb.org/3/${content}/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-      )
-         .then((response) => response.json())
-         .then((data) => setMovie(data))
-   }, [id])
+      axios.get(`https://api.themoviedb.org/3/${content}/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`)
+         .then((response) => setMovie(response.data))
+   }, [id, content])
 
    // Get trailer
    useEffect(() => {
-      fetch(
-         `https://api.themoviedb.org/3/${content}/${id}/videos?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
-      )
-         .then((response) => response.json())
-         .then((data) => {
-            if (data.results && data.results.length > 0) {
-               setTrailerUrl(
-                  `https://www.youtube.com/embed/${data.results[0].key}`
-               )
+      axios.get(`https://api.themoviedb.org/3/${content}/${id}/videos?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`)
+         .then((response) => {
+            if (response.data.results && response.data.results.length > 0) {
+               setTrailerUrl(`https://www.youtube.com/embed/${response.data.results[0].key}`)
             }
          })
-   }, [id])
-
-   
+   }, [id, content])
 
    if (!movie) return null
 
    return (
-      <div className="movie-item-container">
-         <div className="movie item">
-            <img
-               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-               alt={movie.title}
-            />
-            <h1>{movie.title}</h1>
-            <p>{movie.overview}</p>
-         </div>
-         {trailerUrl && (
-            
-            <iframe
-               width="860"
-               height="484.5"
-               src={trailerUrl}
-               title="YouTube video player"
-               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-               allowFullScreen
-               style={{ border: 0,
-            borderRadius: "10px" }}
-            ></iframe>
+      <>
+         {searchResults ? (
+            <MovieList />
+         ) : (
+            <div className="movie-item-container">
+               <div className="movie item">
+                  <img
+                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                     alt={movie.title}
+                  />
+                  <h1>{movie.title}</h1>
+                  <p>{movie.overview}</p>
+               </div>
+               {trailerUrl && (
+                  <iframe
+                     width="860"
+                     height="484.5"
+                     src={trailerUrl}
+                     title="YouTube video player"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowFullScreen
+                     style={{ border: 0, borderRadius: "10px" }}
+                  ></iframe>
+               )}
+            </div>
          )}
-      </div>
+      </>
    )
 }
 
-export default MovieItem
+export default MovieItem;

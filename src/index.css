@@ -266,7 +266,7 @@ button {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 @media (max-width: 1390px) {

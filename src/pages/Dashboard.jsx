@@ -37,7 +37,7 @@ function Dashboard() {
    }, [setMovies, setLoading, apiUrl, page])
 
    const settings = {
-      dots: true,
+      dots: false,
       infinite: true,
       speed: 500,
       slidesToShow: 5,
@@ -58,14 +58,12 @@ function Dashboard() {
             breakpoint: 1024,
             settings: {
                slidesToShow: 3,
-               dots: false,
             },
          },
          {
             breakpoint: 800,
             settings: {
                slidesToShow: 2,
-               dots: false,
             },
          },
          // {
@@ -100,27 +98,23 @@ function Dashboard() {
                         titleKey === "name" ? name : title || name
 
                      return (
-                        <>
-                           <Link to={`/${contentType}/${id}`}>
-                              <div key={id} className="slider movie">
-                                 <img
-                                    src={`${IMG_PATH}${poster_path}`}
-                                    alt={movieTitle}
-                                 />
-                                 <div className="movie-info">
-                                    <h3>{movieTitle}</h3>
-                                    <span
-                                       className={getClassByRate(vote_average)}
-                                    >
-                                       {vote_average.toFixed(1)}
-                                    </span>
-                                 </div>
-                                 <div className="overview">
-                                    <p>{overview}</p>
-                                 </div>
+                        <Link key={id} to={`/${contentType}/${id}`}>
+                           <div className="slider movie">
+                              <img
+                                 src={`${IMG_PATH}${poster_path}`}
+                                 alt={movieTitle}
+                              />
+                              <div className="movie-info">
+                                 <h3>{movieTitle}</h3>
+                                 <span className={getClassByRate(vote_average)}>
+                                    {vote_average.toFixed(1)}
+                                 </span>
                               </div>
-                           </Link>
-                        </>
+                              <div className="overview">
+                                 <p>{overview}</p>
+                              </div>
+                           </div>
+                        </Link>
                      )
                   })}
                </Slider>
