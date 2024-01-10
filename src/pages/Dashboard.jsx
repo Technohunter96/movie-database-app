@@ -1,16 +1,18 @@
+import axios from "axios"
 import { useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import MovieContext from "../context/MovieContext"
-import axios from "axios"
 import MovieList from "../components/MovieList"
+import Spinner from "../components/layout/Spinner"
 
 function Dashboard() {
    const {
       movies,
       setMovies,
+      loading,
       setLoading,
       titleKey,
       getClassByRate,
@@ -66,33 +68,27 @@ function Dashboard() {
                slidesToShow: 2,
             },
          },
-         // {
-         //    breakpoint: 600,
-         //    settings: {
-         //       slidesToShow: 1,
-         //       dots: false,
-         //    },
-         // },
       ],
    }
 
    return (
       <>
-         {searchResults ? (
+         {loading ? (
+            <Spinner />
+         ) : searchResults ? (
             <MovieList />
          ) : (
             <div className="slider">
                <h1>Trending</h1>
                <Slider {...settings}>
-                  {movies.map((oneMovie) => {
+                  {movies.map((movie) => {
                      const {
                         id,
                         title,
                         name,
-                        poster_path,
-                        overview,
-                        vote_average,
-                     } = oneMovie
+                        poster_path: posterPath,
+                        vote_average: voteAverage,
+                     } = movie
 
                      const movieTitle =
                         titleKey === "name" ? name : title || name
@@ -101,17 +97,14 @@ function Dashboard() {
                         <Link key={id} to={`/${contentType}/${id}`}>
                            <div className="slider movie">
                               <img
-                                 src={`${IMG_PATH}${poster_path}`}
+                                 src={`${IMG_PATH}${posterPath}`}
                                  alt={movieTitle}
                               />
                               <div className="movie-info">
                                  <h3>{movieTitle}</h3>
-                                 <span className={getClassByRate(vote_average)}>
-                                    {vote_average.toFixed(1)}
+                                 <span className={getClassByRate(voteAverage)}>
+                                    {voteAverage.toFixed(1)}
                                  </span>
-                              </div>
-                              <div className="overview">
-                                 <p>{overview}</p>
                               </div>
                            </div>
                         </Link>

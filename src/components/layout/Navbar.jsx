@@ -107,7 +107,7 @@ function Navbar() {
       <header className={`navbar ${scrolling ? "scrolling" : ""}`}>
          <nav className="navbarNav">
             <div className="navbarListItems">
-               <NavLink to="/" onClick={() => handleNavLinkClick("trending")}>DASHBOARD</NavLink>
+               <NavLink to="/dashboard" onClick={() => handleNavLinkClick("trending")}>DASHBOARD</NavLink>
                <NavLink to="/movies" onClick={() => handleNavLinkClick("movies")}>MOVIES</NavLink>
                <NavLink to="/series" onClick={() => handleNavLinkClick("series")}>SERIES</NavLink>
                <NavLink to="/kids" onClick={() => handleNavLinkClick("kids")}>KIDS</NavLink>

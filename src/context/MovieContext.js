@@ -6,7 +6,6 @@ export const MovieProvider = ({ children }) => {
    const [movies, setMovies] = useState([])
    const [loading, setLoading] = useState(true)
    const [page, setPage] = useState(1)
-   const [hasMore, setHasMore] = useState(true)
    const [showButton, setShowButton] = useState(false)
    // SearchBar
    const [searchResults, setSearchResults] = useState(null)
@@ -91,8 +90,6 @@ export const MovieProvider = ({ children }) => {
       setLoading,
       page,
       setPage,
-      hasMore,
-      setHasMore,
       showButton,
       setShowButton,
       IMG_PATH,
